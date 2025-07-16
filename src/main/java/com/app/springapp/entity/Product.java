@@ -25,4 +25,5 @@ public class Product {
     private int stockQuantity;
     private String imageUrl;
 
+    private boolean active = true;
 }

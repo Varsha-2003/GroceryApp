@@ -48,5 +48,9 @@ public class CustomerService {
 
 
     }
+
+    public long count() {
+        return customerRepository.count();
+    }
  
 }

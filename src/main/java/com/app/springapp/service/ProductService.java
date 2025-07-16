@@ -24,6 +24,28 @@ public class ProductService {
         return productRepository.findAll(pageable);
     }
 
+    /** Paginated & sorted list by category */
+    public Page<Product> getProductsByCategory(String category, Pageable pageable) {
+        return productRepository.findByCategoryIgnoreCase(category, pageable);
+    }
+
+    /** Paginated & sorted list of only active products (for users) */
+    public Page<Product> getAllActiveProducts(Pageable pageable) {
+        return productRepository.findByActiveTrue(pageable);
+    }
+
+    /** Paginated & sorted list of only active products by category (for users) */
+    public Page<Product> getActiveProductsByCategory(String category, Pageable pageable) {
+        return productRepository.findByCategoryIgnoreCaseAndActiveTrue(category, pageable);
+    }
+
+    /** Toggle product visibility (active status) */
+    public Product setProductActiveStatus(Long id, boolean active) {
+        Product product = getProductById(id);
+        product.setActive(active);
+        return productRepository.save(product);
+    }
+
     public Product getProductById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
@@ -42,6 +64,12 @@ public class ProductService {
     }
 
     public void deleteProduct(Long id) {
-        productRepository.deleteById(id);
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        productRepository.delete(product);
+    }
+
+    public long count() {
+        return productRepository.count();
     }
 }

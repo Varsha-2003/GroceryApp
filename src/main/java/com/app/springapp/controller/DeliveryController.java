@@ -1,5 +1,6 @@
 package com.app.springapp.controller;
 import java.util.List;
+import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,23 @@ public class DeliveryController {
         return ResponseEntity.ok(deliveryService.getAll());
     }
 
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<List<Delivery>> getByCustomerId(@PathVariable Long customerId) {
+        try {
+            List<Delivery> deliveries = deliveryService.getByCustomerId(customerId);
+            System.out.println("Deliveries for customer " + customerId + ": " + (deliveries != null ? deliveries.size() : 0));
+            if (deliveries != null) {
+                deliveries.forEach(d -> System.out.println(d));
+                return ResponseEntity.ok(deliveries);
+            } else {
+                return ResponseEntity.ok(Collections.emptyList());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.ok(Collections.emptyList());
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Delivery> getById(@PathVariable Long id) {
         return ResponseEntity.ok(deliveryService.getById(id));
@@ -47,6 +65,11 @@ public class DeliveryController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         deliveryService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/order/{orderId}")
+    public ResponseEntity<Delivery> getByOrderId(@PathVariable Long orderId) {
+        return ResponseEntity.ok(deliveryService.getByOrderId(orderId));
     }
 }
 

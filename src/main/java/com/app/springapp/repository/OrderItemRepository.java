@@ -5,6 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import com.app.springapp.entity.OrderItem;
 
+import java.util.List;
+
 @Repository
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
+    List<OrderItem> findByCustomer_CustomerIdAndOrderIsNull(Long customerId);
 }

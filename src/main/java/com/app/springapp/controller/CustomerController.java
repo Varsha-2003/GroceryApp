@@ -49,4 +49,9 @@ public class CustomerController {
         customerService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> count() {
+        return ResponseEntity.ok(customerService.count());
+    }
 }
